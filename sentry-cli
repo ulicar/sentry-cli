@@ -1,0 +1,125 @@
+#!/usr/bin/python
+
+import argparse
+import json
+
+from sentry.client import Client
+
+
+def dump(response):
+    print (json.dumps(response))
+
+
+def main():
+    settings = parse_args()
+
+    sentry = Client(settings.token, settings.domain)
+
+    if settings.get_orgs:
+        dump(sentry.get_organizations())
+
+    elif settings.get_org:
+        dump(sentry.get_organization(settings.org))
+
+    elif settings.get_project:
+        dump(sentry.get_project(settings.get_project, settings.org))
+
+    elif settings.get_projects:
+        dump(sentry.get_projects(settings.org))
+
+    elif settings.get_groups:
+        dump(sentry.get_groups(settings.get_groups, settings.org))
+
+    elif settings.get_group:
+        dump(sentry.get_group(settings.get_group))
+
+    elif settings.get_events:
+        dump(sentry.get_events(settings.get_events))
+
+    elif settings.get_event:
+        dump(sentry.get_event(settings.get_event))
+
+    return 0
+
+
+def parse_args():
+    parser = argparse.ArgumentParser('Sentry CLI')
+
+    parser.add_argument(
+        'token',
+        metavar='TOKEN',
+        help='Sentry api token'
+    )
+
+    parser.add_argument(
+        'domain',
+        metavar='DOMAIN',
+        help='Sentry hostname'
+    )
+
+    parser.add_argument(
+        'org',
+        metavar='ORG',
+        help='Organization slug'
+    )
+
+    command = parser.add_mutually_exclusive_group(required=True)
+    command.add_argument(
+        '--get-orgs',
+        default=False,
+        action='store_true',
+        help='Get all organizations'
+    )
+
+    command.add_argument(
+        '--get-project',
+        default=None,
+        metavar='ID',
+        help='Get details for a project'
+    )
+
+    command.add_argument(
+        '--get-projects',
+        metavar='ORG_ID',
+        help='Get all projects in organization'
+    )
+
+    command.add_argument(
+        '--get-groups',
+        metavar='PROJECT_ID',
+        help='Get all groups in project'
+    )
+
+    command.add_argument(
+        '--get-events',
+        metavar='GROUP_ID',
+        help='Get all events in a group'
+    )
+
+    command.add_argument(
+        '--get-org',
+        default=None,
+        metavar='ID',
+        help='Get details for a org'
+    )
+
+    command.add_argument(
+        '--get-group',
+        default=None,
+        metavar='ID',
+        help='Get details for a group'
+    )
+
+    command.add_argument(
+        '--get-event',
+        default=None,
+        metavar='ID',
+        help='Get details for an event'
+
+    )
+
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    main()
