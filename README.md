@@ -4,7 +4,7 @@ Pure python CLI for Sentry service
 
 ### Build rpm:
   
-  python setup.py bdist_rpm
+    python setup.py bdist_rpm
   
 
 ### Usage without installation:
@@ -15,8 +15,8 @@ Pure python CLI for Sentry service
 
 ### Importing sentry lib
 
-  from sentry.client import Client
+    from sentry.client import Client
 
-  sentry = Client('token', 'sentry.com')
-  print (sentry.get_organanizations())
+    sentry = Client('token', 'sentry.com')
+    print (sentry.get_organanizations())
 
